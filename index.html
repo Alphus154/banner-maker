@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Banner Maker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* ADD THIS BLOCK TO LOAD YOUR FONT */
+        @font-face {
+            font-family: 'DistanceRider';
+            src: url('fonts/DistanceriderdemoRegular-yvWm.ttf') format('truetype');
+        }
+
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-section {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .input-group { margin-bottom: 15px; display: flex; align-items: center; }
+        .input-group label { width: 80px; text-align: right; margin-right: 15px; font-weight: bold; }
+        .input-group input {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            width: 350px;
+            border-radius: 4px;
+        }
+
+        .banner-container {
+            background-image: url('images/IA_logo.png.png'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 1200px;
+            height: 210px; 
+            position: relative;
+            margin: 0 auto 20px auto;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .text-wrapper {
+            margin-left: 200px; 
+            margin-top: -80px;/
+            text-align: center;
+        }
+
+        .banner-main-title {
+            /* FONT APPLIED HERE */
+            font-family: 'DistanceRider', sans-serif;
+            color: white;
+            font-weight: 900;
+            font-size: 48px;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+        }
+
+        .banner-subtitle {
+    font-family: 'DistanceRider', sans-serif;
+    color: #b0c4de;
+    font-size: 22px;
+    text-transform: uppercase;
+    
+    /* EDIT THESE LINES TO MOVE THE SUBTITLE */
+    margin-top: 0px;     /* Increase to move DOWN, decrease to move UP */
+    margin-left: 125px;    /* Increase to move RIGHT, use negative (e.g., -20px) to move LEFT */
+    
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+}
+
+        .download-btn {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-section">
+        <div class="input-group">
+            <label>Title:</label>
+            <input type="text" id="tIn" value="MAIN TITLE" oninput="upd()">
+        </div>
+        <div class="input-group">
+            <label>Subtitle:</label>
+            <input type="text" id="sIn" value="SUBTITLE" oninput="upd()">
+        </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <div id="bannerPreview" class="banner-container">
+            <div class="text-wrapper">
+                <div id="dispT" class="banner-main-title">MAIN TITLE</div>
+                <div id="dispS" class="banner-subtitle">SUBTITLE</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <button class="download-btn" onclick="save()">Download Banner</button>
+    </div>
+
+    <script>
+    // Live update for Title and Subtitle
+    function upd() {
+        document.getElementById('dispT').innerText = document.getElementById('tIn').value;
+        document.getElementById('dispS').innerText = document.getElementById('sIn').value;
+    }
+
+    // Fixed Save function
+    async function save() {
+        const element = document.getElementById('bannerPreview');
+        
+        // This ensures your custom Distance Rider font is ready
+        await document.fonts.ready;
+
+        html2canvas(element, {
+            scale: 2,           // High quality
+            useCORS: true,      // Allows loading the logo image
+            allowTaint: false,
+            logging: false,
+            backgroundColor: null
+        }).then(canvas => {
+            try {
+                const link = document.createElement('a');
+                link.download = 'IA-Banner.png';
+                link.href = canvas.toDataURL("image/png");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (err) {
+                console.error("Save failed:", err);
+                alert("Download failed. Try using Firefox or Edge.");
+            }
+        });
+    }
+</script>
+</body>
+</html>
